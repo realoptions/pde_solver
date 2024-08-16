@@ -80,7 +80,7 @@ pub fn solve_second_order_pde(
     fn_fn: impl Fn(f64, f64) -> f64, //for black scholes, this is a constant (-r)
     fn_first_deriv: impl Fn(f64, f64) -> f64, //for black scholes, this is r*S (or, in logs, a constant r-sigma*sigma/2)
     fn_second_deriv: impl Fn(f64, f64) -> f64, //for black scholes, this is sigma*sigma*S*S/2
-    boundary_up: impl Fn(f64, f64) -> f64,    //for black scholes, this is s-ke^{-rt}
+    boundary_up: impl Fn(f64, f64) -> f64,    //for black scholes, this is s-k
     boundary_down: impl Fn(f64, f64) -> f64,  //for black scholes, this is 0
     init_fn: impl Fn(f64) -> f64,             //for black scholes, this is (s-k)^+
     size_t: usize,
@@ -176,7 +176,7 @@ mod tests {
             |_t, _x| -rate,
             |_t, _x| rate - sigma * sigma * 0.5,
             |_t, _x: f64| sigma * sigma * 0.5,
-            |t, x| (stock * x.exp() - strike) * (-rate * t).exp(),
+            |_t, x| (stock * x.exp() - strike),
             |_t, _x| 0.0,
             |x| {
                 let v = stock * x.exp() - strike;
@@ -192,7 +192,7 @@ mod tests {
             &x_lim,
         )
         .unwrap();
-        assert_eq!(result.surface.len(), size_t); //starts at "0"
+        assert_eq!(result.surface.len(), size_t);
         let (_t, x, approx_bs) = result
             .get_result_at_x_and_t(size_t - 1, ((size_x - 1) / 2) as usize)
             .unwrap();
@@ -218,7 +218,7 @@ mod tests {
             |_t, x| -rate * (1.0 - x),
             |_t, x| rate * (1.0 - x) * x,
             |_t, x: f64| (1.0 - x) * (1.0 - x) * x * x * sigma * sigma * 0.5,
-            |_t, x| (2.0 * x - 1.0), // * (-rate * t).exp(),
+            |_t, x| (2.0 * x - 1.0),
             |_t, _x| 0.0,
             |x| {
                 let v = 2.0 * x - 1.0;
