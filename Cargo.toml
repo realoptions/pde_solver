@@ -1,0 +1,9 @@
+[package]
+name = "option_price_pde"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[dev-dependencies]
+black_scholes = "0.10.2"
