@@ -1,0 +1,3 @@
+## Option Price PDE
+
+This is a basic library for solving 1-dimensional PDEs of the form `f_t = alpha(x, t) f_x + sigma(x, t) f_xx + rho(x, t) f`.  It uses finite differences and implicit solutions using the Thomas algorithm.  It is tested on the "basic" Black Scholes equation (with constant coefficients via the transformation `x = log(S)`) and with a transformation that maps the infinite Black Scholes domain to a finite domain (via the transformation `x = S/(S+K)`)
